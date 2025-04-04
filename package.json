@@ -1,0 +1,26 @@
+{
+  "name": "playwright-todomvc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikzb/playwright-todomvc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mikzb/playwright-todomvc/issues"
+  },
+  "homepage": "https://github.com/mikzb/playwright-todomvc#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.14.0"
+  },
+  "dependencies": {
+    "playwright": "^1.51.1"
+  }
+}
