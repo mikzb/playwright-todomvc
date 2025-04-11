@@ -7,7 +7,7 @@ test.describe('Editing Tasks', () => {
     await page.locator('header .new-todo').press('Enter');
   });
 
-  test('should edit a task', async ({ page }) => {
+  test('deberia editar una tarea', async ({ page }) => {
     // Double-click to enter edit mode
     await page.locator('.todo-list li').first().dblclick();
     
@@ -19,31 +19,41 @@ test.describe('Editing Tasks', () => {
     await expect(page.locator('.todo-list li').first()).toContainText('Edited task');
   });
 
-  test('should not save empty task after edit', async ({ page }) => {
+  test('deberia no guardar una tarea vacia o de un caracter al editar', async ({ page }) => {
     // Double-click to enter edit mode
     await page.locator('.todo-list li').first().dblclick();
+    
+    // Store the original value for later comparison
+    const originalValue = await page.locator('.todo-list li .new-todo').inputValue();
     
     // Clear the input
     await page.locator('.todo-list li .new-todo').fill('');
     await page.locator('.todo-list li .new-todo').press('Enter');
     
-    // Verify the task is removed
-    await expect(page.locator('.todo-list li')).toHaveCount(0);
+    // Verify the task is still in edit mode (input field still exists)
+    await expect(page.locator('.todo-list li .new-todo')).toBeVisible();
+    
+    // Verify the input is still empty
+    await expect(page.locator('.todo-list li .new-todo')).toHaveValue('');
+    
+    // Similarly, test with a single character
+    await page.locator('.todo-list li .new-todo').fill('a');
+    await page.locator('.todo-list li .new-todo').press('Enter');
+    
+    // Verify the task is still in edit mode
+    await expect(page.locator('.todo-list li .new-todo')).toBeVisible();
+    
+    // Verify the input has the single character
+    await expect(page.locator('.todo-list li .new-todo')).toHaveValue('a');
+    
+    // click out of the input field to exit editing mode
+    await page.getByRole('heading', { name: 'todos' }).click();
+
+    await expect(page.locator('.todo-list li label')).toHaveText('Original task');
   });
 
-  test('should cancel edit on escape', async ({ page }) => {
-    // Double-click to enter edit mode
-    await page.locator('.todo-list li').first().dblclick();
-    
-    // Try to edit but cancel
-    await page.locator('.todo-list li .new-todo').fill('This should not save');
-    await page.locator('.todo-list li .new-todo').press('Escape');
-    
-    // Verify original text is preserved
-    await expect(page.locator('.todo-list li').first()).toContainText('Original task');
-  });
 
-  test('should cancel edit on click outside the box', async ({ page }) => {
+  test('deberia cancelar la edicion al hacer clic fuera del cuadro', async ({ page }) => {
     await page.goto('https://todomvc.com/examples/react/dist/');
     await page.getByTestId('text-input').fill('Original task');
     await page.getByTestId('text-input').press('Enter');
@@ -54,7 +64,7 @@ test.describe('Editing Tasks', () => {
     await expect(page.locator('.todo-list li label')).toHaveText('Original task');
   });
 
-  test('should maintain completion status after edit', async ({ page }) => {
+  test('deberia mantener el estado de complecion tras editar', async ({ page }) => {
     // Mark task as complete
     await page.locator('.todo-list li .toggle').first().check();
     

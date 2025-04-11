@@ -7,7 +7,7 @@ test.describe('Special Editing Cases', () => {
     await page.locator('header .new-todo').press('Enter');
   });
 
-  test('should trim whitespace when editing', async ({ page }) => {
+  test('deberia recortar espacios en blanco sobrantes al editar', async ({ page }) => {
     // Double-click to enter edit mode
     await page.locator('.todo-list li').first().dblclick();
     
@@ -19,7 +19,7 @@ test.describe('Special Editing Cases', () => {
     await expect(page.locator('.todo-list li').first()).toContainText('Edited task with spaces');
   });
 
-  test('should handle special characters when editing', async ({ page }) => {
+  test('deberia manejar caracteres especiales al editar', async ({ page }) => {
     const specialText = '!@#$%^&*()_+{}:"<>?[];\',./`~';
     
     // Double-click to enter edit mode
