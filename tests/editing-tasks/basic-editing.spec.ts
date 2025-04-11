@@ -43,6 +43,17 @@ test.describe('Editing Tasks', () => {
     await expect(page.locator('.todo-list li').first()).toContainText('Original task');
   });
 
+  test('should cancel edit on click outside the box', async ({ page }) => {
+    await page.goto('https://todomvc.com/examples/react/dist/');
+    await page.getByTestId('text-input').fill('Original task');
+    await page.getByTestId('text-input').press('Enter');
+    await page.getByTestId('todo-item-label').dblclick();
+    await page.getByTestId('todo-item').getByTestId('text-input').fill('Original task this should not show');
+    await page.getByRole('heading', { name: 'todos' }).click();
+
+    await expect(page.locator('.todo-list li label')).toHaveText('Original task');
+  });
+
   test('should maintain completion status after edit', async ({ page }) => {
     // Mark task as complete
     await page.locator('.todo-list li .toggle').first().check();
