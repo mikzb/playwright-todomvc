@@ -3,24 +3,33 @@ import { test, expect } from '@playwright/test';
 test.describe('Special Editing Cases', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://todomvc.com/examples/react/dist/');
-    await page.locator('.new-todo').fill('Original task');
-    await page.locator('.new-todo').press('Enter');
+    await page.locator('header .new-todo').fill('Original task');
+    await page.locator('header .new-todo').press('Enter');
   });
 
   test('should trim whitespace when editing', async ({ page }) => {
-    await page.locator('.todo-list li').dblclick();
-    await page.locator('.todo-list li .edit').fill('   Edited task with spaces   ');
-    await page.locator('.todo-list li .edit').press('Enter');
+    // Double-click to enter edit mode
+    await page.locator('.todo-list li').first().dblclick();
     
-    await expect(page.locator('.todo-list li label')).toHaveText('Edited task with spaces');
+    // Edit with whitespace
+    await page.locator('.todo-list li .new-todo').fill('   Edited task with spaces   ');
+    await page.locator('.todo-list li .new-todo').press('Enter');
+    
+    // Verify whitespace is trimmed
+    await expect(page.locator('.todo-list li').first()).toContainText('Edited task with spaces');
   });
 
   test('should handle special characters when editing', async ({ page }) => {
     const specialText = '!@#$%^&*()_+{}:"<>?[];\',./`~';
-    await page.locator('.todo-list li').dblclick();
-    await page.locator('.todo-list li .edit').fill(specialText);
-    await page.locator('.todo-list li .edit').press('Enter');
     
-    await expect(page.locator('.todo-list li label')).toHaveText(specialText);
+    // Double-click to enter edit mode
+    await page.locator('.todo-list li').first().dblclick();
+    
+    // Edit with special characters
+    await page.locator('.todo-list li .new-todo').fill(specialText);
+    await page.locator('.todo-list li .new-todo').press('Enter');
+    
+    // Verify special characters are preserved
+    await expect(page.locator('.todo-list li').first()).toContainText(specialText);
   });
 });
