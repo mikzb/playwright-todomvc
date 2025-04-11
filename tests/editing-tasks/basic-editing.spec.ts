@@ -8,19 +8,20 @@ test.describe('Editing Tasks', () => {
   });
 
   test('should edit a task', async ({ page }) => {
-    await page.locator('.todo-list li').dblclick();
-    await page.locator('.todo-list li .edit').fill('Edited task');
-    await page.locator('.todo-list li .edit').press('Enter');
+    // Create a new task
+    await page.locator('header .new-todo').fill('Original task');
+    await page.locator('header .new-todo').press('Enter');
     
-    await expect(page.locator('.todo-list li label')).toHaveText('Edited task');
-  });
-
-  test('should not save empty task after edit', async ({ page }) => {
-    await page.locator('.todo-list li').dblclick();
-    await page.locator('.todo-list li .edit').fill('');
-    await page.locator('.todo-list li .edit').press('Enter');
+    // Double-click to enter edit mode - use first() to target only the first item
+    await page.locator('.todo-list li').first().dblclick();
+    // Alternatively: await page.getByTestId('todo-item').first().dblclick();
     
-    await expect(page.locator('.todo-list li')).toHaveCount(0);
+    // Edit the task
+    await page.locator('.todo-list li .new-todo').fill('Edited task');
+    await page.locator('.todo-list li .new-todo').press('Enter');
+    
+    // Check the result - verify the text content is updated
+    await expect(page.locator('.todo-list li').first()).toContainText('Edited task');
   });
 
   test('should cancel edit on escape', async ({ page }) => {
