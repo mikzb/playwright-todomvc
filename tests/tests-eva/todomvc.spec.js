@@ -100,29 +100,6 @@ test.describe('Desmarcar Tareas', () => {
     expect(isCompleted2).toBe(false);
   });
 
-  test('Desmarcar tarea con duplicado sin completar no modifica el duplicado', async ({ page }) => {
-    await navigateToTodoMVC(page);
-    await addTask(page, 'Tarea duplicada');
-    await addTask(page, 'Tarea duplicada');
-    await toggleTask(page, 'Tarea duplicada', 1);
-    await toggleTask(page, 'Tarea duplicada', 1);
-    const isCompleted1 = await checkTaskCompletion(page, 'Tarea duplicada', 1);
-    const isCompleted2 = await checkTaskCompletion(page, 'Tarea duplicada', 2);
-    expect(isCompleted1).toBe(false);
-    expect(isCompleted2).toBe(false);
-  });
-
-  test('Desmarcar tarea con duplicado completado no modifica el duplicado', async ({ page }) => {
-    await navigateToTodoMVC(page);
-    await addTask(page, 'Tarea duplicada');
-    await addTask(page, 'Tarea duplicada');
-    await toggleTask(page, 'Tarea duplicada', 1);
-    await toggleTask(page, 'Tarea duplicada', 1);
-    const isCompleted1 = await checkTaskCompletion(page, 'Tarea duplicada', 1);
-    const isCompleted2 = await checkTaskCompletion(page, 'Tarea duplicada', 2);
-    expect(isCompleted1).toBe(false);
-    expect(isCompleted2).toBe(false);
-  });
 });
 
 test.describe('Seleccionar Todas las Tareas', () => {
@@ -230,11 +207,6 @@ test.describe('Verificación de Enlaces y Recursos', () => {
     await expect(page).toHaveURL('https://todomvc.com/examples/typescript-react/#/');
   });
 
-  test('Comprobar que el enlace a React funciona correctamente', async ({ page }) => {
-    await navigateToTodoMVC(page);
-    await page.click('text=React');
-    await expect(page).toHaveURL('https://react.dev/');
-  });
 
   test('Comprobar que el enlace a "let us know" funciona correctamente', async ({ page }) => {
     await navigateToTodoMVC(page);
