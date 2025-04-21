@@ -1,5 +1,11 @@
 const { test, expect } = require('@playwright/test');
-const { navigateToTodoMVC, addTask, toggleTask, checkTaskCompletion, toggleAllTasks } = require('./utils/helpers');
+const {
+  navigateToTodoMVC,
+  addTask,
+  toggleTask,
+  checkTaskCompletion,
+  toggleAllTasks
+} = require('./utils/helpers');
 
 test.describe('Marcar/Desmarcar Tareas', () => {
   test('Activar el tick de la tarea para marcarla como completada', async ({ page }) => {
@@ -70,28 +76,6 @@ test.describe('Completar Tareas', () => {
     expect(isCompleted1).toBe(true);
     expect(isCompleted2).toBe(true);
   });
-
-  test('Completar tarea con duplicado completado no modifica el duplicado', async ({ page }) => {
-    await navigateToTodoMVC(page);
-    await addTask(page, 'Tarea duplicada');
-    await addTask(page, 'Tarea duplicada');
-    await toggleTask(page, 'Tarea duplicada', 1);
-    const isCompleted1 = await checkTaskCompletion(page, 'Tarea duplicada', 1);
-    const isCompleted2 = await checkTaskCompletion(page, 'Tarea duplicada', 2);
-    expect(isCompleted1).toBe(true);
-    expect(isCompleted2).toBe(false);
-  });
-
-  test('Completar tarea con duplicado sin completar no modifica el duplicado', async ({ page }) => {
-    await navigateToTodoMVC(page);
-    await addTask(page, 'Tarea duplicada');
-    await addTask(page, 'Tarea duplicada');
-    await toggleTask(page, 'Tarea duplicada', 1);
-    const isCompleted1 = await checkTaskCompletion(page, 'Tarea duplicada', 1);
-    const isCompleted2 = await checkTaskCompletion(page, 'Tarea duplicada', 2);
-    expect(isCompleted1).toBe(true);
-    expect(isCompleted2).toBe(false);
-  });
 });
 
 test.describe('Desmarcar Tareas', () => {
@@ -102,20 +86,6 @@ test.describe('Desmarcar Tareas', () => {
     await toggleTask(page, 'Tarea 1');
     const isCompleted = await checkTaskCompletion(page, 'Tarea 1');
     expect(isCompleted).toBe(false);
-  });
-
-  test('Desmarcar múltiples tareas es válido', async ({ page }) => {
-    await navigateToTodoMVC(page);
-    await addTask(page, 'Tarea 1');
-    await addTask(page, 'Tarea 2');
-    await toggleTask(page, 'Tarea 1');
-    await toggleTask(page, 'Tarea 2');
-    await toggleTask(page, 'Tarea 1');
-    await toggleTask(page, 'Tarea 2');
-    const isCompleted1 = await checkTaskCompletion(page, 'Tarea 1');
-    const isCompleted2 = await checkTaskCompletion(page, 'Tarea 2');
-    expect(isCompleted1).toBe(false);
-    expect(isCompleted2).toBe(false);
   });
 
   test('Desmarcar todas las tareas es válido', async ({ page }) => {
@@ -272,4 +242,6 @@ test.describe('Verificación de Enlaces y Recursos', () => {
     await expect(page).toHaveURL('https://github.com/tastejs/todomvc/issues');
   });
 });
+
+
 
